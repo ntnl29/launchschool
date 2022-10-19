@@ -1,0 +1,87 @@
+const readline = require('readline-sync');
+const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
+let userScore = 0;
+let computerScore = 0;
+let choice;
+let computerChoice;
+
+const VALID_CHOICES_SHORT = {
+  r: 'rock',
+  p: 'paper',
+  sc: 'scissors',
+  sp: 'spock',
+  l: 'lizard'
+};
+
+// FUNCTIONS
+
+function prompt(message) {
+  console.log(`=> ${message}`);
+}
+
+function computeWinner(choice, computerChoice) {
+  let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
+  computerChoice = VALID_CHOICES[randomIndex];
+  prompt(`You chose ${choice}, the computer chose ${computerChoice}.`);
+
+  if ((choice === 'rock' && computerChoice === ('scissors' || 'lizard')) ||
+  (choice === 'paper' && computerChoice === ('rock' || 'spock')) ||
+  (choice === 'scissors' && computerChoice === ('paper' || 'lizard')) ||
+  (choice === 'spock' && computerChoice === ('scissors' || 'rock')) ||
+  (choice === 'lizard' && computerChoice === ('spock' || 'paper'))) {
+    prompt('You win!');
+    incrementScore('win');
+  } else if (choice === computerChoice) {
+    prompt('Tie!');
+  } else {
+    prompt('You lose!');
+    incrementScore('lose');
+  }
+}
+
+function incrementScore(status) {
+  if (status === 'win') {
+    userScore += 1;
+  } else if (status === 'lose') {
+    computerScore += 1;
+  }
+}
+
+function showScore() {
+  prompt('You: ' + userScore + ' | Computer: ' + computerScore);
+}
+
+function chooseHand() {
+  prompt("Welcome to Rock, Paper, Scissors, Lizard, Spock!");
+  prompt("For this match, you will play best 3 out of 5.")
+  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
+  let choice = readline.question();
+
+  while (!VALID_CHOICES.includes(choice)) {
+    prompt("That's not a valid choice");
+    choice = readline.question();
+  }
+}
+
+// BODY
+
+while (true) {
+  chooseHand();
+
+  computeWinner(choice, computerChoice);
+
+  showScore();
+
+  if (userScore >= 3 || computerScore >= 3) {
+    prompt('Do you want to play again (y/n)?');
+    let answer = readline.question().toLowerCase();
+    while (answer[0] !== 'n' && answer[0] !== 'y') {
+      prompt('Please enter "y" or "n".');
+      answer = readline.question().toLowerCase();
+    }
+
+    if (answer[0] !== 'y') {
+      break;
+    }
+  }
+}
