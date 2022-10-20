@@ -88,3 +88,46 @@ function triangles(number) {
 }
 
 triangles(10);
+
+// Double Doubles
+
+function twice(number) {
+  let string = String(number);
+  let center = Math.floor(string.length / 2);
+  let firstHalf = string.substring(0, center);
+  let secondHalf = string.substring(center);
+  if (firstHalf === secondHalf) {
+    console.log(number);
+  } else {
+    console.log(number * 2);
+  }
+}
+
+twice(37);          // 74
+twice(44);          // 44
+twice(334433);      // 668866
+twice(444);         // 888
+twice(107);         // 214
+twice(103103);      // 103103
+twice(3333);        // 3333
+twice(7676);        // 7676
+
+// Grade Book
+
+function getGrade(num1, num2, num3) {
+  let average = ((num1 + num2 + num3) / 3);
+  if (average < 60) {
+    console.log("F")
+  } else if (average < 70) {
+    console.log("D")
+  } else if (average < 80) {
+    console.log("C");
+  } else if (average < 90) {
+    console.log("B");
+  } else if (average <= 100) {
+    console.log("A");
+  }
+}
+
+getGrade(95, 90, 93);    // "A"
+getGrade(50, 50, 95);    // "D"
