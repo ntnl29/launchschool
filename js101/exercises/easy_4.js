@@ -8,3 +8,15 @@ function teddyAge() {
 }
 
 console.log(teddyAge());
+
+// Palindromic Strings (Part 1)
+
+function isPalindrome(string) {
+  let revString = string.split('').reverse().join('');
+  console.log(string === revString);
+}
+
+isPalindrome('madam');               // true
+isPalindrome('Madam');               // false (case matters)
+isPalindrome("madam i'm adam");      // false (all characters matter)
+isPalindrome('356653');              // true
