@@ -131,3 +131,29 @@ function getGrade(num1, num2, num3) {
 
 getGrade(95, 90, 93);    // "A"
 getGrade(50, 50, 95);    // "D"
+
+// Clean up the words <--- need to study more
+
+// function cleanUp(string) {
+//   let newString = '';
+//   for (let i = 0; i < string.length; i += 1) {
+//     if (confirmLetter(string[i])) {
+//       newString += string[i];
+//     } else if (newString[newString.length - 1] !== ' ') {
+//       newString += ' ';
+//     }
+//   }
+//   console.log(newString);
+// }
+
+// function confirmLetter(char) {
+//   return (char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z');
+// }
+
+// using regex
+
+function cleanUp(text) {
+  console.log(text.replace(/[^a-z]/gi, " ").replace(/\s+/gi, " "));
+}
+
+cleanUp("---what's my +*& line?");    // " what s my line "
