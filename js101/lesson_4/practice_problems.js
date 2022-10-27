@@ -69,3 +69,69 @@ Object.values(ages).forEach(age => agesTotal += age);
 console.log(agesTotal);
 
 // Practice Problem 10
+
+/* PEDAC
+Pick out the minimum age from object
+
+input: declared variable that is an object with names and respective age
+output: new variable that is the number of the lowest age (Eddie)
+rules:
+  explicit: return the desired number
+
+algorithim:
+- create an array that contains all the values in object
+- iterate through each value in object, the lowest age is written to the above result
+- return result variable
+*/
+
+// let ages = {
+//   Herman: 32,
+//   Lily: 30,
+//   Grandpa: 5843,
+//   Eddie: 10,
+//   Marilyn: 22,
+//   Spot: 237
+// };
+
+let agesArray = Object.values(ages);
+let agesResult = 0;
+// console.log(agesArray);
+for (let index = 0; index < agesArray.length; index +=1) {
+  if (agesArray[index] < agesArray[index - 1]) {
+    agesResult = agesArray[index];
+  }
+}
+
+console.log(agesResult); // or
+console.log(Math.min(...agesArray));
+
+// Practice Problem 11
+
+/* PEDAC
+
+Create an object that expresses the frequency with which each letter occurs in this string.
+
+input: string
+output: new object
+
+rules:
+  explicit:
+    - create an object
+    - each letter in string as key and # occurences as value
+
+algorithim:
+- declare new variable that is an empty object
+- iterate through the string, logging the letter than incrementing that letter
+*/
+
+let statement = "The Flintstones Rock";
+let statementArray = [];
+let statementObject = {};
+
+statementArray = statement.split('').filter(char => char !== ' ');
+statementArray.forEach(char => {
+  statementObject[char] = statementObject[char] || 0;
+  statementObject[char] += 1;
+});
+
+console.log(statementObject);
