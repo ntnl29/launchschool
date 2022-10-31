@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* Cute Angles <----- need to revisit
 
 input: number
@@ -169,3 +170,142 @@ function multiplicativeAverage(array) {
 
 console.log(multiplicativeAverage([3, 5]));                   // "7.500"
 console.log(multiplicativeAverage([2, 5, 7, 11, 13, 17]));    // "28361.667"
+
+/* Multiply Lists
+
+input: 2 arrays
+output: 1 new array
+
+rules:
+  explicit:
+    - 2 arrays combine to a new array
+    - return the product of each pair of numbers based on index
+
+algorithim:
+  - declare a function
+  - declare empty array variable
+  - iterate through both arrays, multiplying based on index
+  - return result array
+*/
+
+function multiplyList (arrayOne, arrayTwo) {
+  let result = [];
+  arrayOne.forEach((number, index) => {
+    result.push(arrayOne[index] * arrayTwo[index])
+  });
+  return result;
+}
+
+console.log(multiplyList([3, 5, 7], [9, 10, 11]));    // [27, 50, 77]
+
+// List of Digits
+
+// function digitList(number) {
+//   let stringArray = String(number).split('');
+//   let numberArray = [];
+//   stringArray.forEach(string => {
+//     numberArray.push(string * 1);
+//   });
+//   return numberArray;
+// }
+
+const digitList = number => String(number).split('').map(Number);
+
+console.log(digitList(12345));       // [1, 2, 3, 4, 5]
+console.log(digitList(7));           // [7]
+console.log(digitList(375290));      // [3, 7, 5, 2, 9, 0]
+console.log(digitList(444));         // [4, 4, 4]
+
+/* How Many?
+
+input: array of vehicles
+output: string showing vehicle type and count
+
+rules:
+  explicit:
+    - function that counts # of occurances
+    - console.log each element along # of occurances
+    - case sensitive
+
+algorithim:
+  - declare function
+  - declare empty object variable
+  - iterate through array to remove duplicates
+  - pass on as keys
+  - use filter and length to determine count
+  - return object as separate console.log
+*/
+
+let vehicles = ['car', 'car', 'truck', 'car', 'SUV', 'truck',
+                'motorcycle', 'motorcycle', 'car', 'truck'];
+
+function countOccurrences(array) {
+  let vehicleStore = {};
+  for (let index = 0; index < array.length; index += 1) {
+    vehicleStore[array[index]] = vehicleStore[array[index]] || 0;
+    vehicleStore[array[index]] += 1;
+  };
+  for (let item in vehicleStore) {
+    console.log(`${item} => ${vehicleStore[item]}`);
+  }
+}
+
+countOccurrences(vehicles);
+
+// Array average
+
+function average(array) {
+  let result = 0;
+  for (let number of array) {
+    result += number;
+  }
+  return Math.floor((result / array.length));
+}
+
+console.log(average([1, 5, 87, 45, 8, 8]));       // 25
+console.log(average([9, 47, 23, 95, 16, 52]));    // 40
+
+// After Midnight Part 1
+
+function timeOfDay(number) {
+  const HOURS_PER_DAY = 24;
+  const MINUTES_PER_HOUR = 60;
+  const MINUTES_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR;
+
+  if (number < 0) {
+    number = (number % MINUTES_PER_DAY) + MINUTES_PER_DAY;
+  } else {
+    number = number % MINUTES_PER_DAY;
+  }
+
+  let hour = Math.floor((number % MINUTES_PER_DAY) / MINUTES_PER_HOUR);
+  let minute = number % MINUTES_PER_HOUR;
+
+  return `${padZero(hour)}:${padZero(minute)}`;
+}
+
+function padZero(number) {
+  return number < 10 ? `0${number}` : String(number);
+}
+
+console.log(timeOfDay(0) === "00:00");
+console.log(timeOfDay(-3) === "23:57");
+console.log(timeOfDay(35) === "00:35");
+console.log(timeOfDay(-1437) === "00:03");
+console.log(timeOfDay(3000) === "02:00");
+console.log(timeOfDay(800) === "13:20");
+console.log(timeOfDay(-4231) === "01:29");
+
+// After Midnight Part 2
+
+function afterMidnight(string) {
+  
+}
+
+console.log(afterMidnight("12:34"));
+// console.log(afterMidnight("00:00") === 0);
+// console.log(beforeMidnight("00:00") === 0);
+// console.log(afterMidnight("12:34") === 754);
+// console.log(beforeMidnight("12:34") === 686);
+// console.log(afterMidnight("24:00") === 0);
+// console.log(beforeMidnight("24:00") === 0);
