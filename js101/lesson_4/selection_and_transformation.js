@@ -28,32 +28,33 @@ selectFruit(produce); // => { apple: 'Fruit', pear: 'Fruit' }
 
 // Mutate doubleNumbers
 
-// function doubleNumbers(numbers) {
-//   let doubledNums = [];
-//   let counter = 0;
+function doubleNumbers(numbers) {
+  let doubledNums = [];
+  let counter = 0;
 
-//   while (counter < numbers.length) {
-//     let currentNum = numbers[counter];
-//     doubledNums.push(currentNum * 2);
+  while (counter < numbers.length) {
+    let currentNum = numbers[counter];
+    doubledNums.push(currentNum * 2);
 
-//     counter += 1;
-//   }
+    counter += 1;
+  }
 
-//   return doubledNums;
-// }
+  return doubledNums;
+}
 
-// function doubleNumbers(numbers) {
-//   numbers.forEach(function (num, index, arr) {
-//     if (index % 2 === 1) {
-//       arr[index] *= 2;
-//     }
-//   });
-//   return numbers;
-// }
+function doubleOddNumbers(numbers) {
+  numbers.forEach(function (num, index, arr) {
+    if (index % 2 === 1) {
+      arr[index] *= 2;
+    }
+  });
+  return numbers;
+}
 
 let myNumbers = [1, 4, 3, 7, 2, 6];
-// console.log(doubleNumbers(myNumbers)); // => [2, 8, 6, 14, 4, 12]
+console.log(doubleNumbers(myNumbers)); // => [2, 8, 6, 14, 4, 12]
 console.log(myNumbers);                // => [1, 4, 3, 7, 2, 6]
+console.log(doubleOddNumbers(myNumbers));  // => [2, 4, 6, 14, 2, 6]
 
 // Flexible Functions
 
