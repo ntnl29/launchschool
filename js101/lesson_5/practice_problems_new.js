@@ -163,3 +163,7 @@ console.log(arrProb12.map(subArr => {
   return subArr.filter(num => num % 3 === 0);
 }));
 
+// Problem 13
+
+let arrProb13 = [[1, 6, 7], [1, 5, 3], [1, 8, 3]];
+
