@@ -162,3 +162,4 @@ let arrProb12 = [[2], [3, 5, 7], [9], [11, 15, 18]];
 console.log(arrProb12.map(subArr => {
   return subArr.filter(num => num % 3 === 0);
 }));
+
