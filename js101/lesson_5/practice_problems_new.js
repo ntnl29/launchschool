@@ -167,3 +167,29 @@ console.log(arrProb12.map(subArr => {
 
 let arrProb13 = [[1, 6, 7], [1, 5, 3], [1, 8, 3]];
 
+console.log(arrProb13.sort((a, b) => {
+  let oddSumA = a.filter(num => num % 2 !== 0)
+    .reduce((sum, next) => sum + next);
+  let oddSumB = b.filter(num => num % 2 !== 0)
+    .reduce((sum, next) => sum + next);
+
+  return oddSumA - oddSumB;
+}));
+
+// Problem 14
+
+let objProb14 = {
+  grape: { type: 'fruit', colors: ['red', 'green'], size: 'small' },
+  carrot: { type: 'vegetable', colors: ['orange'], size: 'medium' },
+  apple: { type: 'fruit', colors: ['red', 'green'], size: 'medium' },
+  apricot: { type: 'fruit', colors: ['orange'], size: 'medium' },
+  marrow: { type: 'vegetable', colors: ['green'], size: 'large' },
+};
+
+console.log(Object.values(objProb14).map(attributes => {
+  if (attributes['type'] === 'fruit') {
+    return attributes.colors;
+  } else {
+    return attributes.size.toUpperCase();
+  }
+}));
