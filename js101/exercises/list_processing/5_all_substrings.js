@@ -6,7 +6,7 @@ function substrings(str) {
     }
   }
   return array;
-};
+}
 
 console.log(substrings('abcde'));
 
