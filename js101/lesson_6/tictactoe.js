@@ -1,14 +1,14 @@
-const readline = require('readline-sync');
+const readline = require("readline-sync");
 
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 
-function prompt(message) {
-  console.log(`=> ${message}`);
+function prompt(msg) {
+  console.log(`=> ${msg}`);
 }
 
-function displayBoard() {
+function displayBoard(board) {
   console.clear();
 
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
@@ -28,22 +28,6 @@ function displayBoard() {
   console.log('');
 }
 
-// let board = {
-//   1: 'X', // top left
-//   2: ' ',
-//   3: ' ',
-//   4: ' ',
-//   5: 'O', // center
-//   6: ' ',
-//   7: ' ',
-//   8: ' ',
-//   9: 'X', // bottom right
-// };
-
-function emptySquares(board) {
-  return Object.keys(board).filter(key => board[key] === INITIAL_MARKER);
-}
-
 function initializeBoard() {
   let board = {};
 
@@ -52,6 +36,10 @@ function initializeBoard() {
   }
 
   return board;
+}
+
+function emptySquares(board) {
+  return Object.keys(board).filter(key => board[key] === ' ');
 }
 
 function playerChoosesSquare(board) {
@@ -70,7 +58,6 @@ function playerChoosesSquare(board) {
 
 function computerChoosesSquare(board) {
   let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
-
   let square = emptySquares(board)[randomIndex];
   board[square] = COMPUTER_MARKER;
 }
@@ -80,7 +67,7 @@ function boardFull(board) {
 }
 
 function someoneWon(board) {
-  return !!detectWinner(board);
+  return detectWinner(board);
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -96,14 +83,14 @@ function detectWinner(board) {
 
     if (
       board[sq1] === HUMAN_MARKER &&
-      board[sq2] === HUMAN_MARKER &&
-      board[sq3] === HUMAN_MARKER
+        board[sq2] === HUMAN_MARKER &&
+        board[sq3] === HUMAN_MARKER
     ) {
       return 'Player';
     } else if (
       board[sq1] === COMPUTER_MARKER &&
-      board[sq2] === COMPUTER_MARKER &&
-      board[sq3] === COMPUTER_MARKER
+        board[sq2] === COMPUTER_MARKER &&
+        board[sq3] === COMPUTER_MARKER
     ) {
       return 'Computer';
     }
@@ -111,8 +98,6 @@ function detectWinner(board) {
 
   return null;
 }
-
-let board = initializeBoard();
 
 while (true) {
   let board = initializeBoard();
