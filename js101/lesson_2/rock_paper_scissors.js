@@ -5,7 +5,7 @@ let computerScore = 0;
 let choice;
 let computerChoice;
 
-const VALID_CHOICES_SHORT = {
+const SHORT_CHOICES = {
   r: 'rock',
   p: 'paper',
   sc: 'scissors',
@@ -53,14 +53,18 @@ function showScore() {
 
 function chooseHand() {
   prompt("Welcome to Rock, Paper, Scissors, Lizard, Spock!");
-  prompt("For this match, you will play best 3 out of 5.")
-  prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
-  let choice = readline.question();
+  prompt("For this match, you will play best 3 out of 5.");
+  prompt(`Choose: r for rock, p for paper, sc for scissors, l for lizard, or sp for spock`);
+  choice = abbreviatedChoice(readline.question());
 
   while (!VALID_CHOICES.includes(choice)) {
     prompt("That's not a valid choice");
     choice = readline.question();
   }
+}
+
+function abbreviatedChoice(choice) {
+  return SHORT_CHOICES[choice];
 }
 
 // BODY
