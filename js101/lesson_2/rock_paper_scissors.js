@@ -59,7 +59,7 @@ function chooseHand() {
 
   while (!VALID_CHOICES.includes(choice)) {
     prompt("That's not a valid choice");
-    choice = readline.question();
+    choice = abbreviatedChoice(readline.question());
   }
 }
 
