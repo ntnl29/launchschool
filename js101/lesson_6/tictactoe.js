@@ -1,8 +1,11 @@
 const readline = require("readline-sync");
-
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
+let userScore = 0;
+let computerScore = 0;
+
+// FUNCTIONS
 
 function prompt(msg) {
   console.log(`=> ${msg}`);
@@ -112,6 +115,19 @@ function joinOr(arr, delimiter = ', ', word = 'or') {
              `${delimiter}${word} ${arr[arr.length - 1]}`;
   }
 }
+
+function introduction() {
+  console.clear();
+  console.log("-".repeat(12));
+  prompt("Welcome to Tic Tac Toe!");
+  console.log("");
+  prompt("For this match, you will play best 2 out of 3. Are you ready?");
+  console.log("-".repeat(12));
+}
+
+// BODY
+
+introduction();
 
 while (true) {
   let board = initializeBoard();
