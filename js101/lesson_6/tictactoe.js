@@ -1,7 +1,15 @@
 const readline = require("readline-sync");
+
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
+const GAMES_TO_WIN = 2;
+const scoreBoard = {player: 0, computer: 0};
+const WINNING_LINES = [
+  [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
+  [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
+  [1, 5, 9], [3, 5, 7]             // diagonals
+];
 
 // FUNCTIONS
 
@@ -10,9 +18,7 @@ function prompt(msg) {
 }
 
 function displayBoard(board) {
-  console.clear();
-
-  console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
+  prompt(`You are "${HUMAN_MARKER}" | Computer is "${COMPUTER_MARKER}"`);
 
   console.log('');
   console.log('     |     |');
@@ -71,26 +77,17 @@ function someoneWon(board) {
   return detectWinner(board);
 }
 
-// eslint-disable-next-line max-lines-per-function
 function detectWinner(board) {
-  let winningLines = [
-    [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
-    [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
-    [1, 5, 9], [3, 5, 7]             // diagonals
-  ];
-
-  for (let line = 0; line < winningLines.length; line++) {
-    let [ sq1, sq2, sq3 ] = winningLines[line];
+  for (let line = 0; line < WINNING_LINES.length; line++) {
+    let [ sq1, sq2, sq3 ] = WINNING_LINES[line];
 
     if (
-      board[sq1] === HUMAN_MARKER &&
-        board[sq2] === HUMAN_MARKER &&
+      board[sq1] === HUMAN_MARKER && board[sq2] === HUMAN_MARKER &&
         board[sq3] === HUMAN_MARKER
     ) {
       return 'Player';
     } else if (
-      board[sq1] === COMPUTER_MARKER &&
-        board[sq2] === COMPUTER_MARKER &&
+      board[sq1] === COMPUTER_MARKER && board[sq2] === COMPUTER_MARKER &&
         board[sq3] === COMPUTER_MARKER
     ) {
       return 'Computer';
@@ -116,11 +113,10 @@ function joinOr(arr, delimiter = ', ', word = 'or') {
 
 function introduction() {
   console.clear();
-  console.log("-".repeat(12));
   prompt("Welcome to Tic Tac Toe!");
   console.log("");
-  prompt("For this match, you will play best 2 out of 3. Are you ready?");
-  console.log("-".repeat(12));
+  prompt("For this match, you will play best 2 out of 3.");
+  console.log("-".repeat(15));
 }
 
 // BODY
@@ -138,8 +134,11 @@ while (true) {
 
     computerChoosesSquare(board);
     if (someoneWon(board) || boardFull(board)) break;
+
+    console.clear();
   }
 
+  console.clear();
   displayBoard(board);
 
   if (someoneWon(board)) {
@@ -148,9 +147,13 @@ while (true) {
     prompt("It's a tie!");
   }
 
-  prompt('Play again? (y or n)');
-  let answer = readline.question().toLowerCase()[0];
-  if (answer !== 'y') break;
-}
+  prompt('Do you want to play again (y/n)?');
+  let playAgain = readline.question().toLowerCase();
+  while (playAgain !== 'n' && playAgain !== 'y') {
+    prompt('Please enter "y" or "n".');
+    playAgain = readline.question().toLowerCase();
+  }
 
+  if (playAgain !== 'y') break;
+}
 prompt('Thanks for playing Tic Tac Toe! See you later.');
