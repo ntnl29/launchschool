@@ -52,9 +52,7 @@ function showScore() {
 }
 
 function chooseHand() {
-  prompt("Welcome to Rock, Paper, Scissors, Lizard, Spock!");
-  prompt("For this match, you will play best 3 out of 5.");
-  prompt(`Choose: r for rock, p for paper, sc for scissors, l for lizard, or sp for spock`);
+  prompt(`Type: r for rock, p for paper, sc for scissors, l for lizard, or sp for spock`);
   choice = abbreviatedChoice(readline.question());
 
   while (!VALID_CHOICES.includes(choice)) {
@@ -67,9 +65,28 @@ function abbreviatedChoice(choice) {
   return SHORT_CHOICES[choice];
 }
 
+function introduction() {
+  console.clear();
+  console.log("-".repeat(12));
+  prompt("Welcome to Rock, Paper, Scissors, Lizard, Spock!");
+  console.log("");
+  prompt("The rules are as follows:");
+  prompt("1. ROCK crushes SCISSORS and LIZARD");
+  prompt("2. PAPER covers rock and disproves SPOCK");
+  prompt("3. SCISSORS cuts PAPER and decapitates LIZARD");
+  prompt("4. LIZARD poisons SPOCK and eats PAPER");
+  prompt("5. SPOCK vaporizes ROCK and smashes SCISSORS");
+  console.log("");
+  prompt("For this match, you will play best 3 out of 5. Are you ready?");
+  console.log("-".repeat(12));
+}
+
 // BODY
 
+introduction();
+
 while (true) {
+
   chooseHand();
 
   computeWinner(choice, computerChoice);
