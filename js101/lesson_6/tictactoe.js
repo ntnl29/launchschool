@@ -2,8 +2,6 @@ const readline = require("readline-sync");
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
-let userScore = 0;
-let computerScore = 0;
 
 // FUNCTIONS
 
