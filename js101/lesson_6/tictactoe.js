@@ -119,6 +119,33 @@ function introduction() {
   console.log("-".repeat(15));
 }
 
+// SCORING
+
+function incrementScore(status) {
+  if (status === 'Player') {
+    scoreBoard.player += 1;
+  } else if (status === 'Computer') {
+    scoreBoard.computer += 1;
+  }
+}
+
+function scoreBoardUpdate() {
+  prompt(` --- Current Score ---`);
+  prompt(`Player: ${scoreBoard.player} | Computer: ${scoreBoard.computer}`);
+  console.log('');
+  prompt(`  First to ${GAMES_TO_WIN} wins`);
+  prompt('-'.repeat(23));
+  console.log('');
+}
+
+function finalResults() {
+  if (scoreBoard.player >= GAMES_TO_WIN) {
+    console.log(`You are the WINNER, ${scoreBoard.player} games to ${scoreBoard.computer}.`);
+  } else if (scoreBoard.computer >= GAMES_TO_WIN) {
+    console.log(`You are the LOSER, ${scoreBoard.player} games to ${scoreBoard.computer}.`);
+  }
+}
+
 // BODY
 
 introduction();
@@ -143,17 +170,24 @@ while (true) {
 
   if (someoneWon(board)) {
     prompt(`${detectWinner(board)} won!`);
+    incrementScore('Player');
+    scoreBoardUpdate();
   } else {
     prompt("It's a tie!");
   }
 
-  prompt('Do you want to play again (y/n)?');
-  let playAgain = readline.question().toLowerCase();
-  while (playAgain !== 'n' && playAgain !== 'y') {
-    prompt('Please enter "y" or "n".');
-    playAgain = readline.question().toLowerCase();
+  if (Object.values(scoreBoard).includes(GAMES_TO_WIN) === true) {
+    finalResults();
+    scoreBoard.player = 0;
+    scoreBoard.computer = 0;
+    console.log('');
+    prompt('Do you want to play again (y/n)?');
+    let playAgain = readline.question().toLowerCase();
+    while (playAgain !== 'n' && playAgain !== 'y') {
+      prompt('Please enter "y" or "n".');
+      playAgain = readline.question().toLowerCase();
+    }
+    if (playAgain !== 'y') break;
   }
-
-  if (playAgain !== 'y') break;
 }
 prompt('Thanks for playing Tic Tac Toe! See you later.');

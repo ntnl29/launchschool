@@ -13,22 +13,26 @@ function incrementScore(status) {
   } else if (status === 'lose') {
     scoreBoard.computer += 1;
   }
+}
+
+function scoreBoardUpdate() {
   prompt(` --- Current Score ---`);
   prompt(`Player: ${scoreBoard.player} | Computer: ${scoreBoard.computer}`);
   console.log('');
   prompt(`  First to ${GAMES_TO_WIN} wins`);
   prompt('-'.repeat(23));
-  checkForWinner();
-}
+  console.log('');
 
-function checkForWinner() {
   if (scoreBoard.player >= GAMES_TO_WIN) {
-    console.log('You are the winner!');
+    console.log('You are the WINNER!');
   } else if (scoreBoard.computer >= GAMES_TO_WIN) {
-    console.log('You are the Loser!');
+    console.log('You are the LOSER!');
   }
 }
 
-incrementScore('lose');
-incrementScore('lose');
-incrementScore('lose');
+// TESTING
+
+incrementScore('win');
+incrementScore('win');
+incrementScore('win');
+scoreBoardUpdate();
