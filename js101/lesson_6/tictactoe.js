@@ -66,21 +66,7 @@ function playerChoosesSquare(board) {
 function computerChoosesSquare(board) {
   let square;
 
-    // Offense
-    for (let index = 0; index < WINNING_LINES.length; index += 1) {
-      let line = WINNING_LINES[index];
-      square = findAtRiskSquare(line, board, COMPUTER_MARKER);
-      if (square) break;
-    }
-
-  // Defense
-  if (!square) {
-    for (let index = 0; index < WINNING_LINES.length; index += 1) {
-      let line = WINNING_LINES[index];
-      square = findAtRiskSquare(line, board, HUMAN_MARKER);
-      if (square) break;
-    }
-  }
+  square = computerOffense(board) || computerDefense(board);
 
   // Take middle if open
   if (board['5'] === INITIAL_MARKER) {
@@ -94,6 +80,26 @@ function computerChoosesSquare(board) {
   }
 
   board[square] = COMPUTER_MARKER;
+}
+
+function computerOffense(board) {
+  let square;
+  for (let index = 0; index < WINNING_LINES.length; index += 1) {
+    let line = WINNING_LINES[index];
+    square = findAtRiskSquare(line, board, COMPUTER_MARKER);
+    if (square) break;
+  }
+  return square;
+}
+
+function computerDefense(board) {
+  let square;
+  for (let index = 0; index < WINNING_LINES.length; index += 1) {
+    let line = WINNING_LINES[index];
+    square = findAtRiskSquare(line, board, HUMAN_MARKER);
+    if (square) break;
+  }
+  return square;
 }
 
 function boardFull(board) {
