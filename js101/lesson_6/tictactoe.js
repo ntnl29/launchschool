@@ -5,11 +5,18 @@ const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const GAMES_TO_WIN = 2;
 const scoreBoard = {player: 0, computer: 0};
+let choice;
+
 const WINNING_LINES = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
   [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
   [1, 5, 9], [3, 5, 7]             // diagonals
 ];
+const FIRST_MOVE_CHOICES = {
+  p: 'player',
+  c: 'computer',
+  r: 'random'
+};
 
 // FUNCTIONS
 
@@ -152,6 +159,19 @@ function introduction() {
   console.log("-".repeat(15));
 }
 
+function firstMove() {
+  prompt('Who should go first? "p" for PLAYER, "c" for COMPUTER, "r" for RANDOM');
+  choice = abbreviatedChoice(readline.question());
+  // while (!FIRST_MOVE_CHOICES.includes(FIRST_MOVE)) {
+  //   prompt('Please enter "p", "c", or "r".');
+  //   FIRST_MOVE = FIRST_MOVE_CHOICES[readline.question().toLowerCase()];
+  // }
+}
+
+function abbreviatedChoice(choice) {
+  return FIRST_MOVE_CHOICES[choice];
+}
+
 // SCORING
 
 function incrementScore(status) {
@@ -194,13 +214,8 @@ function findAtRiskSquare(line, board, marker) {
   return null;
 }
 
-// BODY
-
-introduction();
-
-while (true) {
-  let board = initializeBoard();
-
+function playerGoesFirst(board) {
+  prompt("You go first.");
   while (true) {
     displayBoard(board);
 
@@ -211,6 +226,50 @@ while (true) {
     if (someoneWon(board) || boardFull(board)) break;
 
     console.clear();
+  }
+}
+
+function computerGoesFirst(board) {
+  prompt("Computer goes first.");
+  while (true) {
+    computerChoosesSquare(board);
+    if (someoneWon(board) || boardFull(board)) break;
+
+    displayBoard(board);
+
+    playerChoosesSquare(board);
+    if (someoneWon(board) || boardFull(board)) break;
+
+    console.clear();
+  }
+}
+
+function random(board) {
+  let number = Math.random();
+
+  if (number < 0.5) {
+    playerGoesFirst(board);
+  } else {
+    computerGoesFirst(board);
+  }
+}
+
+// BODY
+
+introduction();
+
+firstMove();
+console.clear();
+
+while (true) {
+  let board = initializeBoard();
+
+  if (choice === 'player') {
+    playerGoesFirst(board);
+  } else if (choice === 'computer') {
+    computerGoesFirst(board);
+  } else {
+    random(board);
   }
 
   console.clear();
