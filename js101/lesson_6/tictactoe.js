@@ -6,6 +6,7 @@ const COMPUTER_MARKER = 'O';
 const GAMES_TO_WIN = 2;
 const scoreBoard = {player: 0, computer: 0};
 let choice;
+let currentPlayer;
 
 const WINNING_LINES = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
@@ -109,6 +110,19 @@ function computerDefense(board) {
   return square;
 }
 
+function findAtRiskSquare(line, board, marker) {
+  let markersInLine = line.map(square => board[square]);
+
+  if (markersInLine.filter(val => val === marker).length === 2) {
+    let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
+    if (unusedSquare !== undefined) {
+      return unusedSquare;
+    }
+  }
+
+  return null;
+}
+
 function boardFull(board) {
   return emptySquares(board).length === 0;
 }
@@ -160,12 +174,12 @@ function introduction() {
 }
 
 function firstMove() {
-  prompt('Who should go first? "p" for PLAYER, "c" for COMPUTER, "r" for RANDOM');
+  prompt('Who should go first? "p" for PLAYER, "c" for COMPUTER, or "r" for RANDOM');
   choice = abbreviatedChoice(readline.question());
-  // while (!FIRST_MOVE_CHOICES.includes(FIRST_MOVE)) {
-  //   prompt('Please enter "p", "c", or "r".');
-  //   FIRST_MOVE = FIRST_MOVE_CHOICES[readline.question().toLowerCase()];
-  // }
+  while (choice !== 'player' && choice !== 'computer' && choice !== 'random') {
+    prompt('Please enter "p", "c", or "r".');
+    choice = abbreviatedChoice(readline.question());
+  }
 }
 
 function abbreviatedChoice(choice) {
@@ -199,80 +213,59 @@ function finalResults() {
   }
 }
 
-// Computer AI
-
-function findAtRiskSquare(line, board, marker) {
-  let markersInLine = line.map(square => board[square]);
-
-  if (markersInLine.filter(val => val === marker).length === 2) {
-    let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
-    if (unusedSquare !== undefined) {
-      return unusedSquare;
-    }
-  }
-
-  return null;
-}
-
-function playerGoesFirst(board) {
-  prompt("You go first.");
-  while (true) {
-    displayBoard(board);
-
-    playerChoosesSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
-
-    computerChoosesSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
-
-    console.clear();
+function confirmChoice() {
+  if (choice === 'player') {
+    currentPlayer = 'player';
+  } else if (choice === 'computer') {
+    currentPlayer = 'computer';
+  } else {
+    random();
   }
 }
 
-function computerGoesFirst(board) {
-  prompt("Computer goes first.");
-  while (true) {
-    computerChoosesSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
-
-    displayBoard(board);
-
-    playerChoosesSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
-
-    console.clear();
-  }
-}
-
-function random(board) {
+function random() {
   let number = Math.random();
 
   if (number < 0.5) {
-    playerGoesFirst(board);
+    currentPlayer = 'player';
   } else {
-    computerGoesFirst(board);
+    currentPlayer = 'computer';
   }
+}
+
+function chooseSquare(board, currentPlayer) {
+  if (currentPlayer === 'player') {
+    displayBoard(board);
+    playerChoosesSquare(board);
+  } else {
+    computerChoosesSquare(board);
+  }
+}
+
+function alternatePlayer(currentPlayer) {
+  if (currentPlayer === 'player') {
+    return 'computer';
+  } else if (currentPlayer === 'computer') {
+    return 'player';
+  }
+  return null;
 }
 
 // BODY
 
 introduction();
-
 firstMove();
-console.clear();
+confirmChoice();
 
 while (true) {
   let board = initializeBoard();
 
-  if (choice === 'player') {
-    playerGoesFirst(board);
-  } else if (choice === 'computer') {
-    computerGoesFirst(board);
-  } else {
-    random(board);
+  while (true) {
+    chooseSquare(board, currentPlayer);
+    currentPlayer = alternatePlayer(currentPlayer);
+    if (someoneWon(board) || boardFull(board)) break;
   }
 
-  console.clear();
   displayBoard(board);
 
   if (someoneWon(board)) {
