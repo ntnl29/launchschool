@@ -5,11 +5,19 @@ const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const GAMES_TO_WIN = 2;
 const scoreBoard = {player: 0, computer: 0};
+let choice;
+let currentPlayer;
+
 const WINNING_LINES = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], // rows
   [1, 4, 7], [2, 5, 8], [3, 6, 9], // columns
   [1, 5, 9], [3, 5, 7]             // diagonals
 ];
+const FIRST_MOVE_CHOICES = {
+  p: 'player',
+  c: 'computer',
+  r: 'random'
+};
 
 // FUNCTIONS
 
@@ -66,21 +74,7 @@ function playerChoosesSquare(board) {
 function computerChoosesSquare(board) {
   let square;
 
-    // Offense
-    for (let index = 0; index < WINNING_LINES.length; index += 1) {
-      let line = WINNING_LINES[index];
-      square = findAtRiskSquare(line, board, COMPUTER_MARKER);
-      if (square) break;
-    }
-
-  // Defense
-  if (!square) {
-    for (let index = 0; index < WINNING_LINES.length; index += 1) {
-      let line = WINNING_LINES[index];
-      square = findAtRiskSquare(line, board, HUMAN_MARKER);
-      if (square) break;
-    }
-  }
+  square = computerOffense(board) || computerDefense(board);
 
   // Take middle if open
   if (board['5'] === INITIAL_MARKER) {
@@ -94,6 +88,39 @@ function computerChoosesSquare(board) {
   }
 
   board[square] = COMPUTER_MARKER;
+}
+
+function computerOffense(board) {
+  let square;
+  for (let index = 0; index < WINNING_LINES.length; index += 1) {
+    let line = WINNING_LINES[index];
+    square = findAtRiskSquare(line, board, COMPUTER_MARKER);
+    if (square) break;
+  }
+  return square;
+}
+
+function computerDefense(board) {
+  let square;
+  for (let index = 0; index < WINNING_LINES.length; index += 1) {
+    let line = WINNING_LINES[index];
+    square = findAtRiskSquare(line, board, HUMAN_MARKER);
+    if (square) break;
+  }
+  return square;
+}
+
+function findAtRiskSquare(line, board, marker) {
+  let markersInLine = line.map(square => board[square]);
+
+  if (markersInLine.filter(val => val === marker).length === 2) {
+    let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
+    if (unusedSquare !== undefined) {
+      return unusedSquare;
+    }
+  }
+
+  return null;
 }
 
 function boardFull(board) {
@@ -146,6 +173,19 @@ function introduction() {
   console.log("-".repeat(15));
 }
 
+function firstMove() {
+  prompt('Who should go first? "p" for PLAYER, "c" for COMPUTER, or "r" for RANDOM');
+  choice = abbreviatedChoice(readline.question());
+  while (choice !== 'player' && choice !== 'computer' && choice !== 'random') {
+    prompt('Please enter "p", "c", or "r".');
+    choice = abbreviatedChoice(readline.question());
+  }
+}
+
+function abbreviatedChoice(choice) {
+  return FIRST_MOVE_CHOICES[choice];
+}
+
 // SCORING
 
 function incrementScore(status) {
@@ -173,41 +213,59 @@ function finalResults() {
   }
 }
 
-// Computer AI
-
-function findAtRiskSquare(line, board, marker) {
-  let markersInLine = line.map(square => board[square]);
-
-  if (markersInLine.filter(val => val === marker).length === 2) {
-    let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
-    if (unusedSquare !== undefined) {
-      return unusedSquare;
-    }
+function confirmChoice() {
+  if (choice === 'player') {
+    currentPlayer = 'player';
+  } else if (choice === 'computer') {
+    currentPlayer = 'computer';
+  } else {
+    random();
   }
+}
 
+function random() {
+  let number = Math.random();
+
+  if (number < 0.5) {
+    currentPlayer = 'player';
+  } else {
+    currentPlayer = 'computer';
+  }
+}
+
+function chooseSquare(board, currentPlayer) {
+  if (currentPlayer === 'player') {
+    displayBoard(board);
+    playerChoosesSquare(board);
+  } else {
+    computerChoosesSquare(board);
+  }
+}
+
+function alternatePlayer(currentPlayer) {
+  if (currentPlayer === 'player') {
+    return 'computer';
+  } else if (currentPlayer === 'computer') {
+    return 'player';
+  }
   return null;
 }
 
 // BODY
 
 introduction();
+firstMove();
+confirmChoice();
 
 while (true) {
   let board = initializeBoard();
 
   while (true) {
-    displayBoard(board);
-
-    playerChoosesSquare(board);
+    chooseSquare(board, currentPlayer);
+    currentPlayer = alternatePlayer(currentPlayer);
     if (someoneWon(board) || boardFull(board)) break;
-
-    computerChoosesSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
-
-    console.clear();
   }
 
-  console.clear();
   displayBoard(board);
 
   if (someoneWon(board)) {
