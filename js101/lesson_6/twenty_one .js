@@ -88,7 +88,6 @@ function printTotal(cards) {
 }
 
 function total(cards) {
-  // cards = [['H', '3'], ['S', 'Q'], ... ]
   let values = cards.map(card => card[0]);
 
   let sum = 0;
