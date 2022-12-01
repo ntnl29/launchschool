@@ -22,3 +22,30 @@ Deck: Start with a standard 52-card deck consisting of:
 
 const deckSuits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
 const deckValues = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
+
+let shuffledDeck = shuffleDeck(deckSuits, deckValues);
+
+// FUNCTIONS
+
+function prompt(msg) {
+  console.log(`=> ${msg}`);
+}
+
+function introduction() {
+  console.clear();
+  prompt("Welcome to Twenty-One!");
+  console.log("");
+  // prompt(); // Explain rules
+  console.log("-".repeat(15));
+}
+
+function shuffleDeck(deckValues, deckSuits) {
+  let deck = [];
+  for (let value of deckValues) {
+    for (let suit of deckSuits) {
+      deck.push([suit, value]);
+    }
+  }
+  return deck;
+}
+
