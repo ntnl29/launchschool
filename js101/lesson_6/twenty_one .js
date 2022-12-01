@@ -23,7 +23,7 @@ Deck: Start with a standard 52-card deck consisting of:
 const deckSuits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
 const deckValues = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
 
-let shuffledDeck = shuffleDeck(deckSuits, deckValues);
+let deck = createDeck(deckSuits, deckValues);
 
 // FUNCTIONS
 
@@ -39,7 +39,7 @@ function introduction() {
   console.log("-".repeat(15));
 }
 
-function shuffleDeck(deckValues, deckSuits) {
+function createDeck(deckValues, deckSuits) {
   let deck = [];
   for (let value of deckValues) {
     for (let suit of deckSuits) {
