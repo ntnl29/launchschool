@@ -147,16 +147,36 @@ function dealersTurn(deck) {
   console.log((' ').repeat(5) + translateHands(dealerCards));
   printTotal(dealerCards, 'Dealer');
 
+  // need to rework, possibly break to a new function
   while (total(dealerCards) < 17) {
     dealerCards.push(deck.shift());
+    console.log('');
     prompt(`Dealer hits: ${dealerCards[dealerCards.length - 1][0]}`);
-    // console.log((' ').repeat(5) + dealerCards[dealerCards.length - 1][0]);
     printTotal(dealerCards, 'Dealer');
     busted(dealerCards, 'Dealer');
   }
   if (total(dealerCards) < 21) {
     prompt('The dealer stays.');
   }
+}
+
+function readResult(playerCards, dealerCards) {
+  if (total(playerCards) > 21 && total(dealerCards) > 21) {
+    return 'You both busted!';
+  } else if ((total(playerCards) > total(dealerCards) &&
+  total(playerCards) <= 21) || total(dealerCards) > 21) {
+    return 'Player wins!';
+  } else if ((total(playerCards) < total(dealerCards) &&
+    total(dealerCards) <= 21) || total(playerCards) > 21) {
+    return 'Dealer wins!';
+  } else {
+    return null;
+  }
+}
+
+function printResult() {
+  console.log('');
+  prompt(readResult(playerCards, dealerCards));
 }
 
 // BODY
@@ -167,3 +187,4 @@ printHands(playerCards, dealerCards);
 printTotal(playerCards, 'Player');
 getHitOrStay(deck);
 dealersTurn(deck);
+printResult();
