@@ -82,9 +82,9 @@ function translateHands(cards) {
   return `${cards[0][0]} and ${cards[1][0]}`;
 }
 
-function printTotal(cards) {
+function printTotal(cards, person) {
   console.log('');
-  prompt('Your total is: ' + total(cards));
+  prompt(`${person}'s total is: ` + total(cards));
 }
 
 function total(cards) {
@@ -109,9 +109,61 @@ function total(cards) {
   return sum;
 }
 
+function getHitOrStay(deck) {
+  console.log('');
+  while (true) {
+    prompt('The dealer looks at you and asks: "Do you want to HIT (h) or STAY (s)?"');
+    console.log('');
+
+    let answer = readline.question().toLowerCase();
+
+    while (answer !== 'h' && answer !== 's') {
+      prompt('The dealer repeats with slight agitation: HIT (h) or STAY (s)?');
+      answer = readline.question().toLowerCase();
+    }
+
+    if (answer === 'h') {
+      playerCards.push(deck.shift());
+      let cardCount = playerCards.length - 1;
+      prompt(`The dealer flips you a card: ${playerCards[cardCount][0]}`);
+      printTotal(playerCards, 'Player');
+    }
+
+    if (answer === 's' || busted(playerCards, 'Player')) break;
+  }
+}
+
+function busted(cards, person) {
+  if (total(cards) > 21) {
+    console.log('');
+    prompt(`${person} busted!`);
+    return true;
+  }
+  return null;
+}
+
+function dealersTurn(deck) {
+  prompt('The dealer flips up his unknown card. This is what he has:');
+  console.log((' ').repeat(5) + translateHands(dealerCards));
+  printTotal(dealerCards, 'Dealer');
+
+  while (total(dealerCards) < 17) {
+    dealerCards.push(deck.shift());
+    prompt(`Dealer hits: ${dealerCards[dealerCards.length - 1][0]}`);
+    // console.log((' ').repeat(5) + dealerCards[dealerCards.length - 1][0]);
+    printTotal(dealerCards, 'Dealer');
+    busted(dealerCards, 'Dealer');
+  }
+  if (total(dealerCards) < 21) {
+    prompt('The dealer stays.');
+  }
+}
+
 // BODY
 
 printIntro();
 dealDeck(deck);
 printHands(playerCards, dealerCards);
-printTotal(playerCards);
+printTotal(playerCards, 'Player');
+getHitOrStay(deck);
+dealersTurn(deck);
