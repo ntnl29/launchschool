@@ -1,31 +1,11 @@
 const readline = require("readline-sync");
 
-/* Pseudocode
-
-1. Initialize deck
-2. Deal cards to player and dealer
-3. Player turn: hit or stay
-   - repeat until bust or stay
-4. If player bust, dealer wins.
-5. Dealer turn: hit or stay
-   - repeat until total >= 17
-6. If dealer busts, player wins.
-7. Compare cards and declare winner.
-
-*/
-
-/*
-Deck: Start with a standard 52-card deck consisting of:
-- 4 suits (Hearts, Diamonds, Clubs, and Spades)
-- 13 values (2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace)
-*/
-
 const deckSuits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
 const deckValues = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
-const deck = shuffle(createDeck(deckSuits, deckValues));
+const deck = createDeck(deckSuits, deckValues);
 
-const playerCards = [];
-const dealerCards = [];
+let playerCards = [];
+let dealerCards = [];
 
 // FUNCTIONS
 
@@ -48,7 +28,7 @@ function createDeck(deckValues, deckSuits) {
       deck.push([suit, value]);
     }
   }
-  return deck;
+  return shuffle(deck);
 }
 
 function shuffle(deck) {
@@ -59,7 +39,7 @@ function shuffle(deck) {
   return deck;
 }
 
-function dealDeck(deck) {
+function dealCards(deck) {
   for (let index = 0; index < 2; index += 1) {
     playerCards.push(deck.shift());
     dealerCards.push(deck.shift());
@@ -127,64 +107,81 @@ function getHitOrStay(deck) {
       let cardCount = playerCards.length - 1;
       prompt(`The dealer flips you a card: ${playerCards[cardCount][0]}`);
       printTotal(playerCards, 'Player');
+      printBusted(playerCards, 'Player');
     }
 
-    if (answer === 's' || busted(playerCards, 'Player')) break;
+    if (answer === 's' || busted(playerCards)) break;
   }
 }
 
-function busted(cards, person) {
+function busted(cards) {
   if (total(cards) > 21) {
-    console.log('');
-    prompt(`${person} busted!`);
     return true;
   }
-  return null;
+  return false;
 }
 
-function dealersTurn(deck) {
+function printBusted(cards, person) {
+  if (busted(cards) === true) {
+    console.log('');
+    prompt(`${person} busted!`);
+  }
+}
+
+function dealersTurn() {
   prompt('The dealer flips up his unknown card. This is what he has:');
   console.log((' ').repeat(5) + translateHands(dealerCards));
   printTotal(dealerCards, 'Dealer');
 
-  // need to rework, possibly break to a new function
+  dealerLogic();
+
+  if (total(dealerCards) < 21) {
+    prompt('The Dealer stays.');
+  }
+}
+
+function dealerLogic() {
   while (total(dealerCards) < 17) {
     dealerCards.push(deck.shift());
     console.log('');
     prompt(`Dealer hits: ${dealerCards[dealerCards.length - 1][0]}`);
     printTotal(dealerCards, 'Dealer');
-    busted(dealerCards, 'Dealer');
-  }
-  if (total(dealerCards) < 21) {
-    prompt('The dealer stays.');
+    printBusted(dealerCards, 'Dealer');
   }
 }
 
-function readResult(playerCards, dealerCards) {
-  if (total(playerCards) > 21 && total(dealerCards) > 21) {
+function readResult() {
+  let playerTotal = total(playerCards);
+  let dealerTotal = total(dealerCards);
+
+  if (playerTotal > 21 && dealerTotal > 21) {
     return 'You both busted!';
-  } else if ((total(playerCards) > total(dealerCards) &&
-  total(playerCards) <= 21) || total(dealerCards) > 21) {
+  } else if ((playerTotal > dealerTotal &&
+  playerTotal <= 21) || dealerTotal > 21) {
     return 'Player wins!';
-  } else if ((total(playerCards) < total(dealerCards) &&
-    total(dealerCards) <= 21) || total(playerCards) > 21) {
+  } else if ((playerTotal < dealerTotal &&
+    dealerTotal <= 21) || playerTotal > 21) {
     return 'Dealer wins!';
   } else {
-    return null;
+    return 'Tie!';
   }
 }
 
 function printResult() {
   console.log('');
-  prompt(readResult(playerCards, dealerCards));
+  prompt(readResult());
 }
 
 // BODY
 
 printIntro();
-dealDeck(deck);
+dealCards(deck);
 printHands(playerCards, dealerCards);
 printTotal(playerCards, 'Player');
 getHitOrStay(deck);
-dealersTurn(deck);
+
+if (busted(playerCards) === false) {
+  dealersTurn();
+}
+
 printResult();
