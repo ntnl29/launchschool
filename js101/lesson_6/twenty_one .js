@@ -137,13 +137,8 @@ function printBusted(cards, person) {
 function dealersTurn() {
   prompt('The dealer flips up his unknown card. This is what he has:');
   console.log((' ').repeat(5) + translateHands(dealerCards));
-  // printTotal(dealerCards, 'Dealer');
 
   dealerLogic();
-
-  if (total(dealerCards) <= NUM_TO_WIN) {
-    prompt('The Dealer stays.');
-  }
 }
 
 function dealerLogic() {
@@ -153,6 +148,10 @@ function dealerLogic() {
     prompt(`Dealer hits: ${dealerCards[dealerCards.length - 1][0]}`);
 
     printBusted(dealerCards, 'Dealer');
+  }
+
+  if (total(dealerCards) <= NUM_TO_WIN) {
+    prompt('The Dealer stays.');
   }
 }
 
