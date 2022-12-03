@@ -141,7 +141,7 @@ function dealersTurn() {
 
   dealerLogic();
 
-  if (total(dealerCards) < NUM_TO_WIN) {
+  if (total(dealerCards) <= NUM_TO_WIN) {
     prompt('The Dealer stays.');
   }
 }
