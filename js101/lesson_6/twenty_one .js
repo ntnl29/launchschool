@@ -2,10 +2,15 @@ const readline = require("readline-sync");
 
 const deckSuits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
 const deckValues = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
-const deck = createDeck(deckSuits, deckValues);
+const scoreBoard = {player: 0, dealer: 0};
 
-let playerCards = [];
-let dealerCards = [];
+const NUM_TO_WIN = 21;
+const DEALER_TARGET_NUM = 17;
+const GAMES_TO_WIN = 5;
+
+let deck;
+let playerCards;
+let dealerCards;
 
 // FUNCTIONS
 
@@ -14,7 +19,6 @@ function prompt(msg) {
 }
 
 function printIntro() {
-  console.clear();
   prompt("Welcome to Twenty-One!");
   console.log("");
   prompt('"RULES PLACEHOLDER"'); // Write out rules
@@ -83,7 +87,7 @@ function total(cards) {
 
   // correct for Aces
   values.filter(value => value === "Ace").forEach(_ => {
-    if (sum > 21) sum -= 10;
+    if (sum > NUM_TO_WIN) sum -= 10;
   });
 
   return sum;
@@ -115,7 +119,7 @@ function getHitOrStay(deck) {
 }
 
 function busted(cards) {
-  if (total(cards) > 21) {
+  if (total(cards) > NUM_TO_WIN) {
     return true;
   }
   return false;
@@ -135,13 +139,13 @@ function dealersTurn() {
 
   dealerLogic();
 
-  if (total(dealerCards) < 21) {
+  if (total(dealerCards) < NUM_TO_WIN) {
     prompt('The Dealer stays.');
   }
 }
 
 function dealerLogic() {
-  while (total(dealerCards) < 17) {
+  while (total(dealerCards) < DEALER_TARGET_NUM) {
     dealerCards.push(deck.shift());
     console.log('');
     prompt(`Dealer hits: ${dealerCards[dealerCards.length - 1][0]}`);
@@ -154,16 +158,24 @@ function readResult() {
   let playerTotal = total(playerCards);
   let dealerTotal = total(dealerCards);
 
-  if (playerTotal > 21 && dealerTotal > 21) {
+  if (playerTotal > NUM_TO_WIN && dealerTotal > NUM_TO_WIN) {
     return 'You both busted!';
-  } else if ((playerTotal > dealerTotal &&
-  playerTotal <= 21) || dealerTotal > 21) {
+  } else if ((playerTotal > dealerTotal && playerTotal <= NUM_TO_WIN) ||
+      dealerTotal > NUM_TO_WIN) {
     return 'Player wins!';
-  } else if ((playerTotal < dealerTotal &&
-    dealerTotal <= 21) || playerTotal > 21) {
+  } else if ((playerTotal < dealerTotal && dealerTotal <= NUM_TO_WIN) ||
+      playerTotal > NUM_TO_WIN) {
     return 'Dealer wins!';
   } else {
     return 'Tie!';
+  }
+}
+
+function incrementScore() {
+  if (readResult() === 'Player wins!') {
+    scoreBoard.player += 1;
+  } else if (readResult() === 'Dealer wins!') {
+    scoreBoard.dealer += 1;
   }
 }
 
@@ -172,16 +184,46 @@ function printResult() {
   prompt(readResult());
 }
 
+function playAgain() {
+  console.log('');
+  console.log("-".repeat(15));
+  console.log('');
+  prompt('Do you want to play again (y/n)?');
+  let answer = readline.question().toLowerCase();
+  while (answer[0] !== 'n' && answer[0] !== 'y') {
+    prompt('Please enter "y" or "n".');
+    answer = readline.question().toLowerCase();
+  }
+  return answer.toLowerCase()[0] === 'y';
+}
+
 // BODY
 
 printIntro();
-dealCards(deck);
-printHands(playerCards, dealerCards);
-printTotal(playerCards, 'Player');
-getHitOrStay(deck);
 
-if (busted(playerCards) === false) {
-  dealersTurn();
+while (true) {
+  console.clear();
+
+  deck = createDeck(deckSuits, deckValues);
+  playerCards = [];
+  dealerCards = [];
+
+  dealCards(deck);
+  printHands(playerCards, dealerCards);
+  printTotal(playerCards, 'Player');
+  getHitOrStay(deck);
+
+  if (busted(playerCards) === false) {
+    dealersTurn();
+  }
+
+  printResult();
+  incrementScore();
+  console.log(scoreBoard);
+
+  if (playAgain()) {
+    continue;
+  } else {
+    break;
+  }
 }
-
-printResult();
