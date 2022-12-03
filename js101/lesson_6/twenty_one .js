@@ -5,8 +5,9 @@ const deckValues = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen
 const scoreBoard = {player: 0, dealer: 0};
 
 const NUM_TO_WIN = 21;
+const GAME_NAME = 'Twenty-One';
 const DEALER_TARGET_NUM = 17;
-const GAMES_TO_WIN = 5;
+const GAMES_TO_WIN = 3;
 
 let deck;
 let playerCards;
@@ -19,9 +20,9 @@ function prompt(msg) {
 }
 
 function printIntro() {
-  prompt("Welcome to Twenty-One!");
+  prompt(`Welcome to ${GAME_NAME}!`);
   console.log("");
-  prompt('"RULES PLACEHOLDER"'); // Write out rules
+  prompt(`Get as close to ${NUM_TO_WIN} without going over. Whoever is closest, wins.`);
   console.log("-".repeat(15));
 }
 
@@ -51,14 +52,12 @@ function dealCards(deck) {
 }
 
 function printHands(playerCards, dealerCards) {
-  prompt('The dealer shuffles the cards. He slowly passes out the cards.');
-  prompt('One for you, one for him. Another for you, another for him.');
-  prompt('Both of your cards are faced upwards. One of his cards faces upwards and the other is face down.');
+  prompt('The dealer shuffles the deck, then passes out the cards.');
   console.log("");
-  prompt('You glance over to the dealer\'s cards and you see:');
+  prompt('You glance over to the dealer\'s cards and see:');
   console.log((' ').repeat(5) + `${dealerCards[0][0]} and an uncertain card`); // dealer's cards
   console.log("");
-  prompt('As you turn your eyes towards your cards, you see:');
+  prompt('As you turn your eyes towards your cards, see:');
   console.log((' ').repeat(5) + translateHands(playerCards)); // player's cards
 }
 
@@ -108,8 +107,11 @@ function getHitOrStay(deck) {
 
     if (answer === 'h') {
       playerCards.push(deck.shift());
+
       let cardCount = playerCards.length - 1;
+
       prompt(`The dealer flips you a card: ${playerCards[cardCount][0]}`);
+
       printTotal(playerCards, 'Player');
       printBusted(playerCards, 'Player');
     }
@@ -149,7 +151,7 @@ function dealerLogic() {
     dealerCards.push(deck.shift());
     console.log('');
     prompt(`Dealer hits: ${dealerCards[dealerCards.length - 1][0]}`);
-    printTotal(dealerCards, 'Dealer');
+
     printBusted(dealerCards, 'Dealer');
   }
 }
@@ -171,6 +173,11 @@ function readResult() {
   }
 }
 
+function printResult() {
+  console.log('');
+  prompt(readResult());
+}
+
 function incrementScore() {
   if (readResult() === 'Player wins!') {
     scoreBoard.player += 1;
@@ -179,14 +186,38 @@ function incrementScore() {
   }
 }
 
-function printResult() {
+function printScoreBoard() {
   console.log('');
-  prompt(readResult());
+  console.log(`----- Current Score -----`);
+  console.log(`| Player: ${scoreBoard.player} | Dealer: ${scoreBoard.dealer} |`);
+  console.log(`|` + (' ').repeat(23) + `|`);
+  console.log(`|    First to ${GAMES_TO_WIN} wins    |`);
+  console.log('-'.repeat(25));
+  console.log('');
+}
+
+function readMatchWinner() {
+  if (scoreBoard.player === GAMES_TO_WIN) {
+    return 'Player';
+  } else if (scoreBoard.dealer === GAMES_TO_WIN) {
+    return 'Dealer';
+  }
+  return null;
+}
+
+function printMatchWinner() {
+  let matchWinner = readMatchWinner();
+
+  prompt(`${matchWinner} WINS the match.`);
+  resetMatch();
+}
+
+function resetMatch() {
+  scoreBoard.player = 0;
+  scoreBoard.dealer = 0;
 }
 
 function playAgain() {
-  console.log('');
-  console.log("-".repeat(15));
   console.log('');
   prompt('Do you want to play again (y/n)?');
   let answer = readline.question().toLowerCase();
@@ -198,12 +229,10 @@ function playAgain() {
 }
 
 // BODY
-
+console.clear();
 printIntro();
 
 while (true) {
-  console.clear();
-
   deck = createDeck(deckSuits, deckValues);
   playerCards = [];
   dealerCards = [];
@@ -217,9 +246,14 @@ while (true) {
     dealersTurn();
   }
 
+  printTotal(dealerCards, 'Dealer');
   printResult();
   incrementScore();
-  console.log(scoreBoard);
+  printScoreBoard();
+
+  if (readMatchWinner() !== null) {
+    printMatchWinner();
+  }
 
   if (playAgain()) {
     continue;
