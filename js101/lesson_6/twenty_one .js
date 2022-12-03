@@ -13,8 +13,6 @@ let deck;
 let playerCards;
 let dealerCards;
 
-// FUNCTIONS
-
 function prompt(msg) {
   console.log(`=> ${msg}`);
 }
@@ -142,7 +140,7 @@ function dealersTurn() {
 }
 
 function dealerLogic() {
-  while (total(dealerCards) < DEALER_TARGET_NUM) {
+  while (total(dealerCards) <= DEALER_TARGET_NUM) {
     dealerCards.push(deck.shift());
     console.log('');
     prompt(`Dealer hits: ${dealerCards[dealerCards.length - 1][0]}`);
@@ -227,7 +225,6 @@ function playAgain() {
   return answer.toLowerCase()[0] === 'y';
 }
 
-// BODY
 console.clear();
 printIntro();
 
