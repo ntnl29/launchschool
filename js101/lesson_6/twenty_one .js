@@ -95,13 +95,13 @@ function total(cards) {
 function getHitOrStay(deck) {
   console.log('');
   while (true) {
-    prompt('The dealer looks at you and asks: "Do you want to HIT (h) or STAY (s)?"');
+    prompt('The dealer looks at you and asks: "Do you want to hit (h) or stay (s)?"');
     console.log('');
 
     let answer = readline.question().toLowerCase();
 
     while (answer !== 'h' && answer !== 's') {
-      prompt('The dealer repeats with slight agitation: HIT (h) or STAY (s)?');
+      prompt('The dealer repeats with slight agitation: (h) or (s)?');
       answer = readline.question().toLowerCase();
     }
 
@@ -137,7 +137,7 @@ function printBusted(cards, person) {
 function dealersTurn() {
   prompt('The dealer flips up his unknown card. This is what he has:');
   console.log((' ').repeat(5) + translateHands(dealerCards));
-  printTotal(dealerCards, 'Dealer');
+  // printTotal(dealerCards, 'Dealer');
 
   dealerLogic();
 
@@ -219,10 +219,10 @@ function resetMatch() {
 
 function playAgain() {
   console.log('');
-  prompt('Do you want to play again (y/n)?');
+  prompt('The dealer asks if you want to play again, yes (y) or no (n)?');
   let answer = readline.question().toLowerCase();
   while (answer[0] !== 'n' && answer[0] !== 'y') {
-    prompt('Please enter "y" or "n".');
+    prompt('The dealer repeats (y) or (n)?');
     answer = readline.question().toLowerCase();
   }
   return answer.toLowerCase()[0] === 'y';
