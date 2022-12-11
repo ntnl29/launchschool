@@ -20,7 +20,6 @@
 function triangle(sideOne, sideTwo, sideThree) {
   let sortedArray = [sideOne, sideTwo, sideThree].sort((a, b) => b - a);
 
-  
 }
 
 console.log(triangle(3, 3, 3));        // "equilateral"
