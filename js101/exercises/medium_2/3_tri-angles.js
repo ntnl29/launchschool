@@ -1,5 +1,4 @@
 function triangle(angleOne, angleTwo, angleThree) {
-  const belowNinety = angle => angle < 90;
   let total = angleOne + angleTwo + angleThree;
   let lowest = Math.min(angleOne, angleTwo, angleThree);
   let array = [angleOne, angleTwo, angleThree];
@@ -14,7 +13,7 @@ function triangle(angleOne, angleTwo, angleThree) {
       return 'obtuse';
     }
   }
-  if (array.every(belowNinety)) {
+  if (array.every(num => num < 90)) {
     return 'acute';
   }
   return null;
